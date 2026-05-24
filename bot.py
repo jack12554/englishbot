@@ -65,7 +65,7 @@ async def groq_call(prompt: str) -> str:
         "model": "llama-3.3-70b-versatile",
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.8,
-        "max_tokens": 1500
+        "max_tokens": 2000
     }
     async with httpx.AsyncClient(timeout=30) as client:
         response = await client.post(url, json=payload, headers=headers)
@@ -75,7 +75,7 @@ async def groq_call(prompt: str) -> str:
 
 async def generate_sentences(category: str) -> str:
     emoji = CATEGORY_EMOJIS.get(category, "📝")
-    prompt = f"""Generate exactly 5 Hindi to English sentence pairs for category: "{category}"
+    prompt = f"""Generate exactly 10 Hindi to English sentence pairs for category: "{category}"
 
 Format EXACTLY like this:
 1. हिंदी वाक्य → English sentence
@@ -83,14 +83,19 @@ Format EXACTLY like this:
 3. हिंदी वाक्य → English sentence
 4. हिंदी वाक्य → English sentence
 5. हिंदी वाक्य → English sentence
+6. हिंदी वाक्य → English sentence
+7. हिंदी वाक्य → English sentence
+8. हिंदी वाक्य → English sentence
+9. हिंदी वाक्य → English sentence
+10. हिंदी वाक्य → English sentence
 
 Rules:
 - Natural commonly used sentences
 - Category specific only
-- No extra text, just 5 pairs"""
+- No extra text, just 10 pairs"""
 
     content = await groq_call(prompt)
-    lines = [l.strip() for l in content.strip().split('\n') if l.strip() and '→' in l][:5]
+    lines = [l.strip() for l in content.strip().split('\n') if l.strip() and '→' in l][:10]
 
     post = f"{emoji} *{category}*\n"
     post += "━━━━━━━━━━━━━━━━━━━━\n\n"
