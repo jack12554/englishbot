@@ -13,7 +13,6 @@ logger = logging.getLogger(__name__)
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 GROQ_API_KEY = os.environ["GROQ_API_KEY"]
 
-# User chat IDs save karne ke liye
 USERS_FILE = "users.json"
 
 def load_users():
@@ -318,7 +317,8 @@ async def handle_quiz_answer(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 
 def main():
-    app = ApplicationBuilder().token(BOT_TOKEN).build()
+    # job_queue(None) — Python 3.13 compatibility fix
+    app = ApplicationBuilder().token(BOT_TOKEN).job_queue(None).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("test", test_post))
     app.add_handler(CommandHandler("categories", show_categories))
